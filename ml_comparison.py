@@ -23,12 +23,13 @@ import numpy as np
 time_init = datetime.now()
 
 config = Config(0, True, 0, 100)
-BREAST_FILE = 'data/brca - copia.csv'  # 'data/wdbc.csv'  #
+BREAST_FILE = 'data/brca - copia.csv'  #'data/wdbc.csv'  #
 FIELD_SEPARATOR = ','
 
 message = "Original + FS(300) + Auto (100) + FS(#training)"
 SPLITS = 5
 REPEATS = 10
+FACTOR = 3
 SHUFFLE = True
 USE_AUTO_ENCODER = True
 USE_FEATURE_SELECTION = True
@@ -36,7 +37,7 @@ USE_PCA = False
 SEED = 100
 EPOCHS_AE = 100
 BATCH_AE = 5
-GPU_DEVICE = 1
+GPU_DEVICE = 0
 
 df_main = pd.read_csv(BREAST_FILE, sep=FIELD_SEPARATOR, index_col=0)
 df_main['class'] = df_main['class'].map({'YES': 1, 'NO': 0})
@@ -74,7 +75,7 @@ for i in range(0, REPEATS):
             list_callbacks = [es]
 
             ENCODING_DIM = config.dim
-            step = SelectKBest(k=3 * ENCODING_DIM)
+            step = SelectKBest(k=FACTOR * ENCODING_DIM)
             X_train_aux = step.fit_transform(X_train, Y_train)
             X_test_aux = step.transform(X_test)
             number_instances, num_attr = X_train_aux.shape[0], X_train_aux.shape[1]
@@ -104,10 +105,6 @@ for i in range(0, REPEATS):
                 # X_train = encoder.predict(X_train)
                 # X_test = encoder.predict(X_test)
                 reset_encoder(GPU_DEVICE)
-        elif USE_PCA:
-            pca = PCA()
-            X_train = pca.fit_transform(X_train, Y_train)
-            X_test = pca.transform(X_test)
 
         if USE_FEATURE_SELECTION:
             number_instances, num_attr = X_train.shape[0], X_train.shape[1]

@@ -101,5 +101,5 @@ for config in configs:
                     reset_encoder(GPU_DEVICE)
 
 ordered = sorted(m_evaluation, key=lambda val: m_evaluation[val])
-notify_slack(
+print(
     "Jorge\n" + BREAST_FILE + '\n' + str(m_evaluation) + "\n" + str(ordered) + "\n" + str(datetime.now() - time_init))
