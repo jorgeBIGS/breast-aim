@@ -6,7 +6,7 @@ import random
 
 from tensorflow.keras import Input, Model
 from tensorflow.keras.layers import Dense
-from sklearn.feature_selection import SelectKBest, SelectFdr
+from sklearn.feature_selection import SelectKBest, SelectFpr
 from sklearn.model_selection import StratifiedKFold
 from sklearn.ensemble import RandomForestClassifier, AdaBoostClassifier, GradientBoostingClassifier
 from sklearn.naive_bayes import GaussianNB
@@ -44,7 +44,7 @@ def extract_measures(classifiers, x, y, repeats, splits, shuffle, encoding_dim, 
             x_train = step.fit_transform(x_train)
             x_test = step.transform(x_test)
 
-            step = SelectFdr()
+            step = SelectFpr()
             x_train = step.fit_transform(x_train, y_train)
             x_test = step.transform(x_test)
 
