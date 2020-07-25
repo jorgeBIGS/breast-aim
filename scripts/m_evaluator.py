@@ -102,4 +102,4 @@ for config in configs:
 
 ordered = sorted(m_evaluation, key=lambda val: m_evaluation[val])
 print(
-    "Jorge\n" + BREAST_FILE + '\n' + str(m_evaluation) + "\n" + str(ordered) + "\n" + str(datetime.now() - time_init))
+     str(m_evaluation) + "\n" + str(ordered) + "\n" + str(datetime.now() - time_init))
