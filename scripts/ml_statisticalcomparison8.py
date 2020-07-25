@@ -6,7 +6,7 @@ import random
 from tensorflow.keras.callbacks import EarlyStopping
 from tensorflow.keras import Input, Model
 from tensorflow.keras.layers import Dense
-from sklearn.feature_selection import SelectFpr, SelectKBest
+from sklearn.feature_selection import SelectFdr, SelectKBest
 from sklearn.model_selection import StratifiedKFold
 from sklearn.ensemble import RandomForestClassifier, AdaBoostClassifier, GradientBoostingClassifier
 from sklearn.naive_bayes import GaussianNB
@@ -55,7 +55,7 @@ def extract_measures(classifiers, file, splits, repeats, use_auto, use_fs, encod
             x_train = step.fit_transform(x_train)
             x_test = step.transform(x_test)
 
-            step = SelectFpr()
+            step = SelectFdr()
             x_train = step.fit_transform(x_train, y_train)
             x_test = step.transform(x_test)
 
@@ -116,12 +116,12 @@ CLASSIFIERS = [
     GradientBoostingClassifier(),
     GaussianNB()]
 
-FILE = 'data/wdbc.csv'  # 'data/brca - copia.csv'#
+FILE = 'data/brca - copia.csv'#'data/wdbc.csv'  #
 s = 5
 r = 10
 n = 100
-b = 10
-e = 400
+b = 5
+e = 100
 
 duration_1 = datetime.now()
 

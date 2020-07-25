@@ -6,7 +6,7 @@ import random
 
 from tensorflow.keras import Input, Model
 from tensorflow.keras.layers import Dense
-from sklearn.feature_selection import SelectKBest, SelectFpr
+from sklearn.feature_selection import SelectKBest, SelectFdr
 from sklearn.model_selection import StratifiedKFold
 from sklearn.ensemble import RandomForestClassifier, AdaBoostClassifier, GradientBoostingClassifier
 from sklearn.naive_bayes import GaussianNB
@@ -21,10 +21,11 @@ GPU_DEVICE = 0
 os.environ["CUDA_DEVICE_ORDER"] = "PCI_BUS_ID"
 os.environ["CUDA_VISIBLE_DEVICES"] = str(GPU_DEVICE)  # specify which GPU(s) to be used
 
+
 def extract_measures(classifiers, x, y, repeats, splits, shuffle, encoding_dim, epochs_ae, batch_ae, use_auto_encoder,
                      use_fs):
     results = {c.__class__.__name__: 0.0 for c in classifiers}
-    for i in range(1, repeats+1):
+    for i in range(1, repeats + 1):
         os.environ['PYTHONHASHSEED'] = str(i)
         random.seed(i)
         np.random.seed(i)
@@ -43,7 +44,7 @@ def extract_measures(classifiers, x, y, repeats, splits, shuffle, encoding_dim, 
             x_train = step.fit_transform(x_train)
             x_test = step.transform(x_test)
 
-            step = SelectFpr()
+            step = SelectFdr()
             x_train = step.fit_transform(x_train, y_train)
             x_test = step.transform(x_test)
 
@@ -88,10 +89,10 @@ SPLITS = 5
 REPEATS = 10
 SHUFFLE = True
 ENCODING_DIM = 100
-EPOCHS_AE = 400
-BATCH_AE = 10
+EPOCHS_AE = 100
+BATCH_AE = 5
 
-BREAST_FILE = 'data/wdbc.csv'  # 'data/brca - copia.csv'#
+BREAST_FILE = 'data/brca - copia.csv'#'data/wdbc.csv'  #
 
 FIELD_SEPARATOR = ','
 
@@ -126,4 +127,4 @@ f.write("AUTO_NO_FS," + str(results3) + "\n")
 f.write("AUTO_FS," + str(results4) + "\n")
 f.close()
 
-print(str(datetime.now()-time_rep))
+print(str(datetime.now() - time_rep))
